@@ -1,4 +1,4 @@
-# space_invaders
+# Space Invaders
 
 Videojuego Space Invaders Unity
 
