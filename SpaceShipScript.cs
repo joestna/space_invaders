@@ -5,7 +5,7 @@ using UnityEngine;
 public class SpaceShipScript : MonoBehaviour
 {
     public int force = 15;
-    float velocidadTorpedo = 80f;
+    float velocidadTorpedo = 200f;
     Rigidbody2D myRB2D;
     public GameObject torpedoPrefab;
     Rigidbody2D torpedoMovement;
@@ -34,13 +34,13 @@ public class SpaceShipScript : MonoBehaviour
         float movement = Input.GetAxis("Horizontal");// * Time.deltaTime * speed;
         myRB2D.velocity = transform.right * movement * force;
 
-        float xPos = Mathf.Clamp(transform.position.x, -6.6f, 6.6f);
+        float xPos = Mathf.Clamp(transform.position.x, -3f, 3f);
         transform.position = new Vector2(xPos, myRB2D.position.y);
 
         // Solo se podra instanciar un nuevo torpedo si se ha pulsado el boton Jump=spaceBar y la espera para disparar ha terminado
         if (Input.GetButton("Jump") && esperaDisparo == false)
         {
-            GameObject torpedo = Instantiate(torpedoPrefab, new Vector2(xPos, -5.4f), Quaternion.identity);
+            GameObject torpedo = Instantiate(torpedoPrefab, new Vector2(xPos, -3f), Quaternion.identity);
             listaTorpedos.Add(torpedo);
 
             torpedoMovement = torpedo.GetComponent<Rigidbody2D>();
@@ -48,24 +48,44 @@ public class SpaceShipScript : MonoBehaviour
 
             StartCoroutine(espera1seg(xPos));
         }
+        
 
+        // LAS DOS FORMAS SIGUIENTES CONSIGUEN HACER LO MISMO:
+        // DESTRUYE LAS INSTANCIAS DE LOS OBJETOS TORPEDO CUANDO LLEGAN AL FINAL PARA QUE NO SE ALMACENEN EN MEMORIA PORQUE NO SE VOLVERAN A USAR
 
-        //StartCoroutine(espera1seg(xPos));
-        int i = 0;
-        int tamanyoListaTorpedos = listaTorpedos.Count;
-        while( i < tamanyoListaTorpedos)
+        /*
+        if(listaTorpedos.Count > 0)
         {
-            GameObject torpedo = listaTorpedos[i];
-
-            if (torpedo.GetComponent<Transform>().position.y > 3)
+            foreach (GameObject torpedo in listaTorpedos)
             {
-                Destroy(torpedo);
-                tamanyoListaTorpedos = listaTorpedos.Count;
-                i = 0;
+                if (torpedo.GetComponent<Transform>().position.y > 3.5)
+                {
+                    listaTorpedos.Remove(torpedo);
+                    Destroy(torpedo);
+                }
             }
-
-            i++;
         }
+        */
+        
+        if(listaTorpedos.Count > 0)
+        {
+            int i = 0;
+            int tamanyoListaTorpedos = listaTorpedos.Count;
+            while (i < tamanyoListaTorpedos)
+            {
+                GameObject torp = listaTorpedos[i];
+
+                if (torp.GetComponent<Transform>().position.y > 3.5)
+                {
+                    listaTorpedos.Remove(torp);
+                    Destroy(torp);
+                    tamanyoListaTorpedos = listaTorpedos.Count;
+                    i = -1;
+                }
+
+                i++;
+            }
+        }       
     }
 }
 
