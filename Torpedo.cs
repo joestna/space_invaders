@@ -5,20 +5,14 @@ using UnityEngine;
 public class Torpedo : MonoBehaviour
 {
     int contador = 0;
-    // Start is called before the first frame update
-    void Start()
-    {
 
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    void Start() {}
+    void Update() {}
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        Debug.Log(collision);
+
         if(contador == 0)
         {
             contador++;
@@ -27,7 +21,6 @@ public class Torpedo : MonoBehaviour
         else
         {
             Destroy(this.gameObject);
-        }
-        
+        }        
     }
 }

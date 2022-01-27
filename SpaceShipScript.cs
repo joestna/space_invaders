@@ -21,6 +21,7 @@ public class SpaceShipScript : MonoBehaviour
     }
 
     
+    // NO LA ESTOY USANDO -> COLIDER CanShot
     // Evita que se puedan disparar cohetes seguidos instantaneamente
     IEnumerator espera1seg( float xPos)
     {
@@ -31,33 +32,36 @@ public class SpaceShipScript : MonoBehaviour
     }
 
     
-
     void FixedUpdate()
     {
-        float movement = Input.GetAxis("Horizontal");// * Time.deltaTime * speed;
+        float movement = Input.GetAxis("Horizontal");
         myRB2D.velocity = transform.right * movement * force;
-        //Debug.Log(movement);
 
-
-        float xPos = Mathf.Clamp(transform.position.x, -3f, 3f);
+        float xPos = Mathf.Clamp(transform.position.x, -6.5f, 6.5f);
         transform.position = new Vector2(xPos, myRB2D.position.y);
 
+        // ESPERADISPARO AHORA SIEMPRE ESTA EN FALSE -> COLIDER Canshot
         // Solo se podra instanciar un nuevo torpedo si se ha pulsado el boton Jump=spaceBar y la espera para disparar ha terminado
         if (Input.GetButton("Jump") && esperaDisparo == false)
         {
-            GameObject torpedo = Instantiate(torpedoPrefab, new Vector2(xPos, -1f), Quaternion.identity);
+            GameObject torpedo = Instantiate(torpedoPrefab, new Vector2(xPos, -5f), Quaternion.identity);
             listaTorpedos.Add(torpedo);
 
             torpedoMovement = torpedo.GetComponent<Rigidbody2D>();
             torpedoMovement.AddForce(transform.up * velocidadTorpedo);
 
-            //StartCoroutine(espera1seg(xPos));
+            //StartCoroutine(espera1seg(xPos)); -> COLIDER CanShot
 
             esperaDisparo = true;
             Debug.Log(esperaDisparo);
         }
     }
 
+
+
+
+
+    // ELIMIAR LAS INSTANCIAS DE TORPEDO PREFAB SIN USAR COLIDER
     
     /*
     private void OnTriggerEnter2D(Collider2D collision)

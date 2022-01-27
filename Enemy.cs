@@ -6,35 +6,50 @@ public class Enemy : MonoBehaviour
 {
     bool left = false;
     float movimiento = 2f;
+    bool finLateralPantalla = true;
 
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
+    void Start() {}
+
+
     void Update()
     {
-        if (transform.position.x < 3 && left == false)
+        if (transform.position.x < 6.5 && left == false)
         {
-            transform.position = transform.position + new Vector3(movimiento * Time.deltaTime, 0f);
+            transform.position += new Vector3(movimiento * Time.deltaTime, 0f);
+            //transform.position += Vector3.right * Time.deltaTime;
         }
         
-        if(transform.position.x > 3)
+        if(transform.position.x > 6.5)
         {
             left = true;
+            movimiento += 1f;
+
+            finLateralPantalla = true;
         }
 
-        if(transform.position.x > -3 && left == true)
+
+
+        if(transform.position.x > -6.5 && left == true)
         {
-            transform.position = transform.position + new Vector3(movimiento * Time.deltaTime * -1, 0f);
+            transform.position += new Vector3(movimiento * Time.deltaTime * -1, 0f);
         }
 
-        if (transform.position.x < -3)
+        if (transform.position.x < -6.5)
         {
             left = false;
-        }
-        
+            movimiento += 1f;
 
+            finLateralPantalla = true;
+        }
+
+
+
+        if (finLateralPantalla)
+        {
+            transform.position += Vector3.down;
+        }
+
+        finLateralPantalla = false;
     }
 }
