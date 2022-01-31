@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Torpedo : MonoBehaviour
 {
@@ -11,8 +12,6 @@ public class Torpedo : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log(collision);
-
         if(contador == 0)
         {
             contador++;
@@ -21,6 +20,16 @@ public class Torpedo : MonoBehaviour
         else
         {
             Destroy(this.gameObject);
-        }        
+        }    
+
+        if(collision.tag == "Enemy")
+        {
+            GameObject enemyCollision = collision.gameObject;
+            Debug.Log(enemyCollision.name);
+
+            enemyCollision.GetComponent<Enemy>().setDestroyed(true);
+
+            Destroy(this.gameObject);
+        }
     }
 }
